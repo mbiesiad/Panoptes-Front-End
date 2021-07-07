@@ -150,21 +150,22 @@ export default class DropdownEditor extends React.Component {
               <br />
             </div>
             <br />
-            <div>
-              <AutoSave resource={this.props.workflow}>
-                <span className="form-label">Help text</span>
-                <br />
-                <MarkdownEditor
-                  name={`${this.props.taskPrefix}.help`}
-                  value={this.props.task.help || ''}
-                  rows="4"
-                  className="full"
-                  onChange={handleChange}
-                  onHelp={() => alert(<MarkdownHelp />)}
-                />
-              </AutoSave>
-              <small className="form-help">Add text and images for a help window.</small>
-            </div>
+            {!this.props.isSubtask && (
+              <div>
+                <AutoSave resource={this.props.workflow}>
+                  <span className="form-label">Help text</span>
+                  <br />
+                  <MarkdownEditor
+                    name={`${this.props.taskPrefix}.help`}
+                    value={this.props.task.help || ''}
+                    rows="4"
+                    className="full"
+                    onChange={handleChange}
+                    onHelp={() => alert(<MarkdownHelp />)}
+                  />
+                </AutoSave>
+                <small className="form-help">Add text and images for a help window.</small>
+              </div>)}
             <hr />
           </section>
 
@@ -212,23 +213,25 @@ export default class DropdownEditor extends React.Component {
           <hr />
         </div>
 
-        <AutoSave resource={this.props.workflow}>
-          <span className="form-label">Next task</span>
-          <br />
-          <NextTaskSelector
-            task={this.props.task}
-            workflow={this.props.workflow}
-            name={`${this.props.taskPrefix}.next`}
-            value={this.props.task.next || ''}
-            onChange={handleInputChange.bind(this.props.workflow)}
-          />
-        </AutoSave>
+        {!this.props.isSubtask && (
+          <AutoSave resource={this.props.workflow}>
+            <span className="form-label">Next task</span>
+            <br />
+            <NextTaskSelector
+              task={this.props.task}
+              workflow={this.props.workflow}
+              name={`${this.props.taskPrefix}.next`}
+              value={this.props.task.next || ''}
+              onChange={handleInputChange.bind(this.props.workflow)}
+            />
+          </AutoSave>)}
 
       </div>);
   }
 }
 
 DropdownEditor.propTypes = {
+  isSubtask: PropTypes.bool,
   task: PropTypes.shape({
     help: PropTypes.string,
     instruction: PropTypes.string,
@@ -245,6 +248,7 @@ DropdownEditor.propTypes = {
 };
 
 DropdownEditor.defaultProps = {
+  isSubtask: false,
   task: {},
   workflow: {}
 };
